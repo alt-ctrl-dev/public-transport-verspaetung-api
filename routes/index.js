@@ -21,13 +21,13 @@ async function routes(fastify) {
         let vehicleInformation = await vehicleController.isLineDelayed(line_id);
         return { result: vehicleInformation };
       } else {
-        throw boom.boomify({
+        response.status(400).send({
           error: true,
           message: "Please provide a line id"
         });
       }
     } catch (err) {
-      return response.status(404).send(err);
+      return response.status(400).send(err);
     }
   });
 }

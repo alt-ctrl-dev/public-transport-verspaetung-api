@@ -15,25 +15,15 @@ const VehicleController = data => {
   };
 
   const isLineDelayed = async line_id => {
-    try {
-      const { timetable } = await data.collection;
-      let index = _.findIndex(timetable, function(o) {
-        return o.line_id === line_id;
-      });
-      if (index === -1) {
-        throw boom.boomify(
-          {
-            error: true,
-            message: "Could not find line ID " + line_id
-          },
-          { statusCode: 400 }
-        );
-      }
-
-      return timetable[index].delay > 0;
-    } catch (err) {
-      throw boom.boomify(err);
+    const { timetable } = await data.collection;
+    let index = _.findIndex(timetable, function(o) {
+      return o.line_id === line_id;
+    });
+    if (index === -1) {
+      throw boom.boomify(new Error("Could not find line ID " + line_id));
     }
+
+    return timetable[index].delay > 0;
   };
 
   return { getVehicleInformation, isLineDelayed };
