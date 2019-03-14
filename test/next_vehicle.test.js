@@ -1,7 +1,7 @@
 const app = require("../app");
 var expect = require("chai").expect;
 
-describe("/api/find_vehicle", () => {
+describe("/api/next_vehicle", () => {
   let server;
 
   beforeEach(async () => {
@@ -10,10 +10,10 @@ describe("/api/find_vehicle", () => {
     await server.ready();
   });
 
-  it("GET returns 200 if a correct line id is passed", async () => {
+  it("GET returns 200 if a correct params are passed", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=09:00:00"
+      url: "/api/next_vehicle?stop_id=0&timestamp=09:00:00"
     });
     expect(response.statusCode).to.equal(200);
     const payload = JSON.parse(response.payload);
@@ -26,64 +26,24 @@ describe("/api/find_vehicle", () => {
       .to.have.property("stops")
       .to.be.an("array")
       .of.length(2);
-
-    expect(payload)
-      .to.have.property("distance")
-      .to.equal(1);
   });
 
-  it("GET returns 400 if X is not passed", async () => {
+  it("GET returns 400 if stop_id is not passed", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle"
+      url: "/api/next_vehicle"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
     expect(payload)
       .to.have.property("message")
-      .that.equals("Please provide x as a number");
-  });
-
-  it("GET returns 400 if X is not a number", async () => {
-    const response = await server.inject({
-      method: "GET",
-      url: "/api/find_vehicle?x=a"
-    });
-    expect(response.statusCode).to.equal(400);
-    const payload = JSON.parse(response.payload);
-    expect(payload)
-      .to.have.property("message")
-      .that.equals("Please provide x as a number");
-  });
-
-  it("GET returns 400 if Y is not passed", async () => {
-    const response = await server.inject({
-      method: "GET",
-      url: "/api/find_vehicle?x=1"
-    });
-    expect(response.statusCode).to.equal(400);
-    const payload = JSON.parse(response.payload);
-    expect(payload)
-      .to.have.property("message")
-      .that.equals("Please provide y as a number");
-  });
-
-  it("GET returns 400 if Y is not passed as a number", async () => {
-    const response = await server.inject({
-      method: "GET",
-      url: "/api/find_vehicle?x=1&y=c"
-    });
-    expect(response.statusCode).to.equal(400);
-    const payload = JSON.parse(response.payload);
-    expect(payload)
-      .to.have.property("message")
-      .that.equals("Please provide y as a number");
+      .that.equals("Please provide stop_id");
   });
 
   it("GET returns 400 if timestamp is not passed", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0"
+      url: "/api/next_vehicle?stop_id=0"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -95,7 +55,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is not passed as numbers", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=a:b:c"
+      url: "/api/next_vehicle?stop_id=0&timestamp=a:b:c"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -109,7 +69,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as H:M:S", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=9:9:9"
+      url: "/api/next_vehicle?stop_id=0&timestamp=9:9:9"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -121,7 +81,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as HH:M:S", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=09:9:9"
+      url: "/api/next_vehicle?stop_id=0&timestamp=09:9:9"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -133,7 +93,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as HH:MM:S", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=09:09:9"
+      url: "/api/next_vehicle?stop_id=0&timestamp=09:09:9"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -145,7 +105,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as as time greater than 23 hours", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=24:09:09"
+      url: "/api/next_vehicle?stop_id=0&timestamp=24:09:09"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -157,7 +117,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as as time less than 00 hours", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=-01:09:09"
+      url: "/api/next_vehicle?stop_id=0&timestamp=-01:09:09"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -169,7 +129,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as as time less than 00 minute", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=01:-09:09"
+      url: "/api/next_vehicle?stop_id=0&timestamp=01:-09:09"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -181,7 +141,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as as time greater than 60 minute", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=01:60:09"
+      url: "/api/next_vehicle?stop_id=0&timestamp=01:60:09"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -193,7 +153,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as as time less than 00 second", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=01:09:-09"
+      url: "/api/next_vehicle?stop_id=0&timestamp=01:09:-09"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);
@@ -205,7 +165,7 @@ describe("/api/find_vehicle", () => {
   it("GET returns 400 if timestamp is passed as as time greater than 60 second", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=01:09:60"
+      url: "/api/next_vehicle?stop_id=0&timestamp=01:09:60"
     });
     expect(response.statusCode).to.equal(400);
     const payload = JSON.parse(response.payload);

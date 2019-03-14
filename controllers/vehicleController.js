@@ -17,7 +17,7 @@ const VehicleController = async data => {
         return o.x == point.x && o.y == point.y;
       });
       let stop = stops_loc[stop_index];
-      let next_line = await getNextVechicle(stop.stop_id, timestamp);
+      let { next_line } = await getNextVechicle(stop.stop_id, timestamp);
 
       return { next_line, distance };
     } catch (err) {
@@ -49,7 +49,7 @@ const VehicleController = async data => {
       });
       next_line.push({ line_name: v.line_name, line_id: v.line_id, stops });
     });
-    return next_line;
+    return { next_line };
   };
 
   return { getVehicleInformation, isLineDelayed, getNextVechicle };

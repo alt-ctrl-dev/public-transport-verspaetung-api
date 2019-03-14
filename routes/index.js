@@ -46,9 +46,8 @@ async function routes(fastify) {
     try {
       let { query } = request;
       let { stop_id, timestamp } = query;
-
       if (!stop_id) throw new Error("Please provide stop_id");
-      if (!timestamp) throw new Error("Please provide stop_id");
+      if (!timestamp) throw new Error("Please provide timestamp");
       tsvalidator(timestamp);
       let next_vehicle = await vehicleController.getNextVechicle(
         stop_id,

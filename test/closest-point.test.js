@@ -16,7 +16,6 @@ describe("closest point validation", () => {
       .to.have.property("distance")
       .that.is.a("number");
 
-    console.log("cp_op.closest_pair.points", cp_op.closest_pair.points);
     expect(cp_op.closest_pair)
       .to.have.property("points")
       .to.have.lengthOf(1);
