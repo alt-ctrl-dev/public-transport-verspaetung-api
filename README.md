@@ -17,11 +17,13 @@ As a side note, the city of Verspaetung has been built on a strict grid - all lo
 ## How to run the program
 
 1. `git clone git@github.com:reubenkcoutinho/public-transport-verspaetung-api.git`
-2. `npm install` OR `yarn`
-3. `npm start` OR `yarn start`
+2. `yarn`
+3. `yarn start`
 
 ## How to test
 
+This will check for standard style guide and run the necessary unit tests
+
 1. `git clone git@github.com:reubenkcoutinho/public-transport-verspaetung-api.git`
-2. `npm install` OR `yarn`
-3. `npm test` OR `yarn test`
+2. `yarn`
+3. `yarn test`
