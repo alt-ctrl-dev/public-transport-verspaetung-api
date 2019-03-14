@@ -89,7 +89,7 @@ describe("/api/line_delay", () => {
     const payload = JSON.parse(response.payload);
     expect(payload)
       .to.have.property("message")
-      .that.equals("Please provide timestamp as HH:MM:SS");
+      .that.equals("Please provide timestamp");
   });
 
   it("GET returns 400 if timestamp is not passed as numbers", async () => {
