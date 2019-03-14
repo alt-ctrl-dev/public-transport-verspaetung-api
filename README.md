@@ -1,5 +1,7 @@
 # API for the Public Transport of Verspaetung
 
+[![Build Status](https://travis-ci.org/reubenkcoutinho/public-transport-verspaetung-api.svg?branch=master)](https://travis-ci.org/reubenkcoutinho/public-transport-verspaetung-api)
+
 ## Problem
 
 In the fictional city of Verspaetung, public transport is notoriously unreliable. To tackle the problem, the city council has decided to make the public transport timetable and delay information public, opening up opportunities for innovative use cases.
