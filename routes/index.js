@@ -24,13 +24,6 @@ async function routes(fastify) {
           "Please provide timestamp as numeric values in the format HH:MM:SS"
         );
 
-      console.log("hour", hour > 24);
-      // console.log("timeArr[0].length", timeArr[0].length);
-      // console.log(
-      //   "(hour > 24 && hour < 0) || timeArr[0].length !== 2",
-      //   (hour > 24 && hour < 0) || timeArr[0].length !== 2
-      // );
-
       if (hour >= 24 || hour < 0 || timeArr[0].length !== 2)
         throw new Error(
           "Please provide the hours in timestamp between 00 and 24"
