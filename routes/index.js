@@ -2,7 +2,7 @@ async function routes(fastify) {
   const _ = require("lodash");
   const data = require("../data")();
   const VehicleController = require("../controllers/vehicleController");
-  const vehicleController = VehicleController(data);
+  const vehicleController = await VehicleController(data);
 
   fastify.get("/api/find_vehicle", async (request, response) => {
     try {
@@ -54,6 +54,25 @@ async function routes(fastify) {
     try {
       let { query } = request;
       let { line_id } = query;
+      line_id = parseInt(line_id);
+      if (line_id !== null && !isNaN(line_id)) {
+        let vehicleInformation = await vehicleController.isLineDelayed(line_id);
+        return { result: vehicleInformation };
+      } else {
+        response.status(400).send({
+          error: true,
+          message: "Please provide a line id"
+        });
+      }
+    } catch (err) {
+      return response.status(400).send(err);
+    }
+  });
+
+  fastify.get("/api/next_vehicle", async (request, response) => {
+    try {
+      let { query } = request;
+      let { stop_id, timestamp } = query;
       line_id = parseInt(line_id);
       if (line_id !== null && !isNaN(line_id)) {
         let vehicleInformation = await vehicleController.isLineDelayed(line_id);

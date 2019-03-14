@@ -2,10 +2,10 @@ const boom = require("boom");
 const _ = require("lodash");
 const ClosestPoint = require("../utils/closest-point");
 
-const VehicleController = data => {
+const VehicleController = async data => {
+  const { timetable, stops_loc } = await data.collection;
   const getVehicleInformation = async (x, y, timestamp) => {
     try {
-      const { timetable, stops_loc } = await data.collection;
       let cp = ClosestPoint(stops_loc, x, y);
       let cp_op = cp.getClosestPoint();
 
@@ -17,20 +17,7 @@ const VehicleController = data => {
         return o.x == point.x && o.y == point.y;
       });
       let stop = stops_loc[stop_index];
-
-      let vehicles = _.filter(timetable, function(tt) {
-        return _.some(tt.stops, s => {
-          return s.stop_id == stop.stop_id && timestamp < s.stop_time;
-        });
-      });
-
-      let next_line = [];
-      vehicles.forEach(v => {
-        let stops = _.filter(v.stops, s => {
-          return s.stop_id == stop.stop_id;
-        });
-        next_line.push({ line_name: v.line_name, line_id: v.line_id, stops });
-      });
+      let next_line = await getNextVechicle(stop.stop_id, timestamp);
 
       return { next_line, distance };
     } catch (err) {
@@ -39,18 +26,33 @@ const VehicleController = data => {
   };
 
   const isLineDelayed = async line_id => {
-    const { timetable } = await data.collection;
     let index = _.findIndex(timetable, function(o) {
       return o.line_id === line_id;
     });
     if (index === -1) {
       throw boom.boomify(new Error("Could not find line ID " + line_id));
     }
-
     return timetable[index].delay > 0;
   };
 
-  return { getVehicleInformation, isLineDelayed };
+  const getNextVechicle = async (stop_id, timestamp) => {
+    let vehicles = _.filter(timetable, function(tt) {
+      return _.some(tt.stops, s => {
+        return s.stop_id == stop_id && timestamp < s.stop_time;
+      });
+    });
+
+    let next_line = [];
+    vehicles.forEach(v => {
+      let stops = _.filter(v.stops, s => {
+        return s.stop_id == stop_id;
+      });
+      next_line.push({ line_name: v.line_name, line_id: v.line_id, stops });
+    });
+    return next_line;
+  };
+
+  return { getVehicleInformation, isLineDelayed, getNextVechicle };
 };
 
 module.exports = VehicleController;
