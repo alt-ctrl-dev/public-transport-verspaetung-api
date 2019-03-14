@@ -13,14 +13,23 @@ describe("/api/line_delay", () => {
   it("GET returns 200 if a correct line id is passed", async () => {
     const response = await server.inject({
       method: "GET",
-      url: "/api/find_vehicle?x=1&y=0&timestamp=10:00:00"
+      url: "/api/find_vehicle?x=1&y=0&timestamp=09:00:00"
     });
     expect(response.statusCode).to.equal(200);
     const payload = JSON.parse(response.payload);
     expect(payload)
       .to.have.property("next_line")
-      .to.be.an("array");
-    expect(payload).to.have.property("distance");
+      .to.be.an("array")
+      .of.length(1);
+
+    expect(payload.next_line[0])
+      .to.have.property("stops")
+      .to.be.an("array")
+      .of.length(2);
+
+    expect(payload)
+      .to.have.property("distance")
+      .to.equal(1);
   });
 
   it("GET returns 400 if X is not passed", async () => {
