@@ -1,5 +1,4 @@
 const app = require("../app");
-
 var expect = require("chai").expect;
 
 describe("/api/line_delay", () => {

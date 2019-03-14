@@ -77,16 +77,16 @@ module.exports = () => {
         return parseInt(o.stop_id) === stop_id;
       });
 
-      if (stop_index === -1) {
-        //Add stop detail
-        timetable[line_index].stops.push({
-          stop_id,
-          stop_time: stop_time.time
-        });
-      } else {
-        //Replace time as it is the new updated time
-        timetable[line_index].stops[stop_index].stop_time = stop_time.time;
-      }
+      // if (stop_index === -1) {
+      //Add stop detail
+      timetable[line_index].stops.push({
+        stop_id,
+        stop_time: stop_time.time
+      });
+      // } else {
+      //   //Replace time as it is the new updated time
+      //   timetable[line_index].stops[stop_index].stop_time = stop_time.time;
+      // }
     });
 
     delays.forEach(delay => {
