@@ -30,7 +30,7 @@ async function routes(fastify) {
 			line_id = parseInt(line_id);
 			if (line_id !== null && !isNaN(line_id)) {
 				let vehicleInformation = await vehicleController.isLineDelayed(line_id);
-				return { result: vehicleInformation };
+				return vehicleInformation;
 			} else {
 				response.status(400).send({
 					error: true,

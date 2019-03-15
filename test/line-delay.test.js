@@ -18,7 +18,12 @@ describe("/api/line_delay", () => {
 		});
 		expect(response.statusCode).to.equal(200);
 		const payload = JSON.parse(response.payload);
-		expect(payload).to.deep.equal({ result: true });
+		expect(payload)
+			.to.have.property("delay")
+			.that.equals(2);
+		expect(payload)
+			.to.have.property("result")
+			.that.equals(true);
 	});
 
 	it("GET returns 400 if no query is passed", async () => {

@@ -32,7 +32,9 @@ const VehicleController = async data => {
 		if (index === -1) {
 			throw boom.boomify(new Error("Could not find line ID " + line_id));
 		}
-		return timetable[index].delay > 0;
+		let delay = timetable[index].delay;
+		let result = delay > 0;
+		return { delay, result };
 	};
 
 	const getNextVechicle = async (stop_id, timestamp) => {
