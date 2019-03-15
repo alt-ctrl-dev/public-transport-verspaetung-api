@@ -40,14 +40,22 @@ const VehicleController = async data => {
 	const getNextVechicle = async (stop_id, timestamp) => {
 		let vehicles = _.filter(timetable, function(tt) {
 			return _.some(tt.stops, s => {
-				return s.stop_id == stop_id && timestamp < s.stop_time;
+				return (
+					s.stop_id == stop_id &&
+          Date.parse(`01/01/2011 ${timestamp}`) <
+            Date.parse(`01/01/2011 ${s.stop_time}`)
+				);
 			});
 		});
 
 		let next_line = [];
 		vehicles.forEach(v => {
 			let stops = _.filter(v.stops, s => {
-				return s.stop_id == stop_id;
+				return (
+					s.stop_id == stop_id &&
+          Date.parse(`01/01/2011 ${timestamp}`) <
+            Date.parse(`01/01/2011 ${s.stop_time}`)
+				);
 			});
 			next_line.push({ line_name: v.line_name, line_id: v.line_id, stops });
 		});

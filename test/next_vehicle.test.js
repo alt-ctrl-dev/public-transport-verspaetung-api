@@ -26,7 +26,7 @@ describe("/api/next_vehicle", () => {
 		expect(payload.next_line[0])
 			.to.have.property("stops")
 			.to.be.an("array")
-			.of.length(2);
+			.of.length(1);
 	});
 
 	it("GET returns 400 if stop_id is not passed", async () => {
