@@ -30,6 +30,6 @@ This will check for standard style guide and run the necessary unit tests
 2. `yarn`
 3. `yarn test`
 
-## See it live here
+## Challenge
 
-https://reubenkcoutinho.github.io/
+Added challenge info [challenge.md](challenge.md)
